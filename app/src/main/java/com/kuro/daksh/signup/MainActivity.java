@@ -23,65 +23,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button b = findViewById(R.id.LogIn);
+        Button c = findViewById(R.id.signin);
 
-        final EditText name = findViewById(R.id.name);
-        final EditText email = findViewById(R.id.Email);
-        final EditText phone = findViewById(R.id.Phone);
-        final EditText password = findViewById(R.id.password);
-        final EditText dob = findViewById(R.id.Date);
-
-        Button button= findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user= new User();
-                user.setFirebase_id("rdfhgjhjjy");
-                user.setDevice("4");
-                user.setName(name.getText().toString());
-                user.setPhone(phone.getText().toString());
-                user.setEmail(email.getText().toString());
-                user.setPassword(password.getText().toString());
-                user.setDob(dob.getText().toString());
-                postnewData(user);
-                Intent in = new Intent(MainActivity.this,login.class);
-                in.putExtra("phone",user.getPhone());
-                in.putExtra("password",user.getPassword());
-                startActivity(in);
+                Intent intent = new Intent(MainActivity.this, login.class);
+                startActivity(intent);
+            }
+        });
+        c.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, createaccount.class);
+                startActivity(intent);
             }
         });
 
-    }
 
-    private void postnewData(User user) {
-        Retrofit.Builder builder=new Retrofit.Builder().
-                baseUrl("http://veritracksystems.com/api/customer/")
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit= builder.build();
-
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("firebase_id", user.getFirebase_id())
-                .addFormDataPart("device", user.getDevice())
-                .addFormDataPart("name",user.getName())
-                .addFormDataPart("email",user.getEmail())
-                .addFormDataPart("phone",user.getPhone())
-                .addFormDataPart("password",user.getPassword())
-                .addFormDataPart("dob",user.getDob())
-                .build();
-
-
-        signUPApi client = retrofit.create(signUPApi.class);
-        Call<User> call = client.createAccount(requestBody);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Toast.makeText(MainActivity.this, "Sucessfully Created User\n"+response.body().getStatus()+"\n"+response.body().getData(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

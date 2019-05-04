@@ -8,4 +8,6 @@ import retrofit2.http.POST;
 public interface signUPApi {
     @POST("signup")
     Call<User> createAccount(@Body RequestBody user);
+    @POST("login")
+    Call<getUser> getAcctout(@Body RequestBody getuser);
 }
